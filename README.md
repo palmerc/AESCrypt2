@@ -15,5 +15,7 @@ To recreate the functionality of the `aescrypt2_huawei` app you need to do the f
    3) `./aescrypt2 1 config_no_header.encrypted config.decrypted.gz key.txt`
    4) `gunzip config.decrypted.gz`
 
+After getting the encryption key and searching for it I found a spanish speaking forum that says they got the encryption key from a file found on the device in `/etc/wap/aes_string`.
+
 [1]: https://zedt.eu/tech/hardware/obtaining-administrator-access-huawei-hg8247h/
 [2]: https://packetstormsecurity.com/files/35655/aescrypt2-1.0.tgz.html
