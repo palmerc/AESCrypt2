@@ -1,6 +1,13 @@
 ## AESCrypt2
 
-This is the original source code upon which the [Huawei HG8245 configuration encrypt/decrypt tool][1] was built.
+This is the original source code upon which the [Huawei HG8245 configuration encrypt/decrypt tool][1] was built. This router is used with Fiber customers in Oslo, Norway that are using [Get][3] as their ISP. Being able to encrypt and decrypt the firmware allows you to add a new user with super-user privileges or change the root/admin account to have the same access as get provides. The details are described in the first link. In summary, passwords are hashed using
+`SHA256(MD5(admin))` which in this example yields  `465c194afb65670f38322df087f0a9bb225cc257e43eb4ac5a0c98ef5b3173ac`. You'll find this user in the config from Get and it has been given reduced privileges (level 1).
+
+### Get user
+
+As defined in the configuration file Get added a user called 'getaccess' and with level 0 privileges (the highest) 
+
+    <X_HW_WebUserInfoInstance InstanceID="2" UserName="getaccess" Password="fc0fe4711c0263f37013e423fde0a8be0d64d45f231c924952327052db50b66f" UserLevel="0" Enable="1" ModifyPasswordFlag="1" PassMode="2"/>
 
 The tarball can be download from [packetstormsecurity.com][2].
 
@@ -19,3 +26,4 @@ After getting the encryption key and searching for it I found a spanish speaking
 
 [1]: https://zedt.eu/tech/hardware/obtaining-administrator-access-huawei-hg8247h/
 [2]: https://packetstormsecurity.com/files/35655/aescrypt2-1.0.tgz.html
+[3]: https://www.get.no
