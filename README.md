@@ -1,21 +1,37 @@
 ## AESCrypt2
 
-This is the original source code upon which the [Huawei HG8245 configuration encrypt/decrypt tool][1] was built. This router is used with Fiber customers in Oslo, Norway that are using [Get][3] as their ISP. Being able to encrypt and decrypt the firmware allows you to add a new user with super-user privileges or change the root/admin account to have the same access as Get provides themselves. The details are described in the first link. In summary, passwords are hashed using
-`SHA256(MD5(admin))` which in this example yields  `465c194afb65670f38322df087f0a9bb225cc257e43eb4ac5a0c98ef5b3173ac`. You'll find this user in the config from Get and it has been given reduced privileges (level 1).
+The original tarball came from here [packetstormsecurity.com][2].
 
-### Get user
+### Get Fiber and the Huawei HG8245
 
-As defined in the configuration file Get added a user called 'getaccess' and with level 0 privileges (the highest) 
+This router is used with Fiber customers in Oslo, Norway that are using        [Get][3] as their ISP.
 
-    <X_HW_WebUserInfoInstance InstanceID="2" UserName="getaccess" Password="fc0fe4711c0263f37013e423fde0a8be0d64d45f231c924952327052db50b66f" UserLevel="0" Enable="1" ModifyPasswordFlag="1" PassMode="2"/>
+In typical ISP fashion they can't just hand you an Ethernet jack and get out of your way, they want to give you a router that NATs and provides WiFi. In this case they've adopted the Huawei HG8245 which is large and provides terrible WiFi coverage within the apartment. They're at least nice enough to turn off the WiFi and set Bridge mode, but the box still takes over most of the electrical box in my apartment. Everytime I've had them make any change to my service-level they have turned off bridge-mode and then I have to make yet another call to turn it back on. So in summary I really wish they would replace the big box with a [Ubiquiti Nano G][4] and get out of the business of trying to do things they're terrible at.
 
-The tarball can be download from [packetstormsecurity.com][2].
+### Exploring the device
+
+I began the exploration of the unit to be able to manage it myself. A bit of searching came up with a page that included a binary tool for Linux and Windows to encrypt/decrypt the configuration on the device [aescrypt2_huawei][1] and how to trick the router into allowing you to download the configuration. 
+
+### Get the Get configuration file
+
+The configuration from Get prevents you from downloading the config. To trick the router you'll do the following:
+
+ 1) Unplug the fiber cable
+ 2) Perform a factory reset in the web interface
+ 3) Wait for it to reboot
+ 4) Log back in using root/admin and you'll see your access level provides full access
+ 5) Plug the fiber cable back in 
+ 6) And then download the config when the WAN light goes solid green
+ 
+### Decrypting the configuration
+
+The configuration is stored as an encrypted XML file. Finding a decryption tool was easy enough, but unfortunately it was provided for Linux and Windows and not for Mac. So I really wanted to know what the encryption key being used was and be able to use it directly on my Mac. So I started looking at the binary with [IDA Pro][5].
 
 Based upon the analysis of the program:
    
    Huawei's encryption key is `hex:13395537D2730554A176799F6D56A239`
 
-To recreate the functionality of the `aescrypt2_huawei` app you need to do the following:
+To recreate the functionality of the `aescrypt2_huawei` tool you need to compile the source code in this repo and do the following:
 
    1) `echo -n 'hex:13395537D2730554A176799F6D56A239' > key.txt`
    2) `dd if=config.encrypted of=config_no_header.encrypted bs=1 skip=8`
@@ -24,6 +40,28 @@ To recreate the functionality of the `aescrypt2_huawei` app you need to do the f
 
 After getting the encryption key and searching for it I found a spanish speaking forum that says they got the encryption key from a file found on the device in `/etc/wap/aes_string`.
 
+### Looking at the config
+
+The config is pretty long but the main thing needed was to allow you to add a new user with super-user privileges or change the root/admin account to have the same access as Get provides themselves. In summary, passwords are hashed using
+
+`SHA256(MD5(admin))` which in this example yields  `465c194afb65670f38322df087f0a9bb225cc257e43eb4ac5a0c98ef5b3173ac`. 
+
+You'll find this user in the config from Get and it has been given reduced privileges (level 1).
+
+### Get user
+
+As defined in the configuration file Get added a user called 'getaccess' and with level 0 privileges (the highest) 
+
+    <X_HW_WebUserInfoInstance InstanceID="2" UserName="getaccess" Password="fc0fe4711c0263f37013e423fde0a8be0d64d45f231c924952327052db50b66f" UserLevel="0" Enable="1" ModifyPasswordFlag="1" PassMode="2"/>
+
+So you can modify the root user UserLevel to 0 and you're really root again. However, it probably makes more sense to add a new user since the root/admin combination is well known.
+
+### One more thing
+
+The astute reader might have noticed I skipped the first 8-bytes before decrypting the file. The properly encrypted Huawei config file has some sort of header (4 bytes) and checksum (4 bytes) and I just ignored it. If you plan on uploading a modified config back to the router you'd need to recreate that header, so in that case I'd use the Linux and Windows tool to be safe. 
+
 [1]: https://zedt.eu/tech/hardware/obtaining-administrator-access-huawei-hg8247h/
 [2]: https://packetstormsecurity.com/files/35655/aescrypt2-1.0.tgz.html
 [3]: https://www.get.no
+[4]: https://www.ubnt.com/ufiber/ufiber-nano-g/
+[5]: https://www.hex-rays.com
