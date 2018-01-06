@@ -6,7 +6,7 @@ The tarball can be download from [packetstormsecurity.com][2].
 
 Based upon the analysis of the program:
    
-   Huawei's encryption key is 'hex:13395537D2730554A176799F6D56A239'
+   Huawei's encryption key is `hex:13395537D2730554A176799F6D56A239`
 
 To recreate the functionality of the `aescrypt2_huawei` app you need to do the following:
 
