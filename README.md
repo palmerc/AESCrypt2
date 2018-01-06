@@ -1,6 +1,6 @@
 ## AESCrypt2
 
-This is the original source code upon which the [Huawei HG8245 configuration encrypt/decrypt tool][1] was built. This router is used with Fiber customers in Oslo, Norway that are using [Get][3] as their ISP. Being able to encrypt and decrypt the firmware allows you to add a new user with super-user privileges or change the root/admin account to have the same access as get provides. The details are described in the first link. In summary, passwords are hashed using
+This is the original source code upon which the [Huawei HG8245 configuration encrypt/decrypt tool][1] was built. This router is used with Fiber customers in Oslo, Norway that are using [Get][3] as their ISP. Being able to encrypt and decrypt the firmware allows you to add a new user with super-user privileges or change the root/admin account to have the same access as Get provides themselves. The details are described in the first link. In summary, passwords are hashed using
 `SHA256(MD5(admin))` which in this example yields  `465c194afb65670f38322df087f0a9bb225cc257e43eb4ac5a0c98ef5b3173ac`. You'll find this user in the config from Get and it has been given reduced privileges (level 1).
 
 ### Get user
