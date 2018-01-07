@@ -6,7 +6,7 @@ The original tarball came from here [packetstormsecurity.com][2].
 
 This router is used with Fiber customers in Oslo, Norway that are using        [Get][3] as their ISP.
 
-In typical ISP fashion they can't just hand you an Ethernet jack and get out of your way, they want to give you a router that NATs and provides WiFi. In this case they've adopted the Huawei HG8245 which is large and provides terrible WiFi coverage within the apartment. Funny that they'll sell you 500/500Mbps Internet service on a router that cannot deliver it to the majority of modern devicees. They're at least nice enough to turn off the WiFi and set Bridge mode, but the box still takes over most of the electrical box in my apartment. Everytime I've had them make any change to my service-level they have turned off bridge-mode and then I have to make yet another call to turn it back on. So in summary I really wish they would replace the big box with a [Ubiquiti Nano G][4] and get out of the business of trying to do things they're terrible at.
+In typical ISP fashion they can't just hand you an Ethernet jack and get out of your way, they want to give you a router that NATs and provides WiFi. In this case they've adopted the Huawei HG8245 which is large and provides terrible WiFi coverage within the apartment. Funny that they'll sell you 500/500Mbps Internet service on a router that cannot possibly deliver it to the majority of modern devicees. They're at least nice enough to turn off the WiFi and set Bridge mode, but the box still takes over most of the electrical box in my apartment. Everytime I've had them make any change to my service-level they have turned off bridge-mode and then I have to make yet another call to turn it back on. So in summary I really wish they would replace the big box with a [Ubiquiti Nano G][4] and get out of the business of trying to do things they're terrible at.
 
 ### Exploring the device
 
@@ -60,8 +60,53 @@ So you can modify the root user UserLevel to 0 and you're really root again. How
 
 The astute reader might have noticed I skipped the first 8-bytes before decrypting the file. The properly encrypted Huawei config file has some sort of header (4 bytes) and checksum (4 bytes) and I just ignored it. If you plan on uploading a modified config back to the router you'd need to recreate that header, so in that case I'd use the Linux and Windows tool to be safe. 
 
+### What about replacing the router?
+
+I replaced the box with a [Ubiquiti Nano G][6]. Get is using the Serial Number of the Huawei router as the method of authentication. This is a relatively common practice. So essentially, the OLT sees the Serial Number and lets it connect.
+
+On the Nano G you issue the following commands discussed on [this website][7]:
+
+    $ ssh ubnt@192.168.1.1
+
+    > sh
+
+    # cd bin
+    # ./gponctl stop
+
+    Stop ONU without sending dying gasp messages
+
+    # ./gponctl setSnPwd --sn 41-4c-43-4c-xx-xx-xx-xx --pwd 20-20-20-20-20-20-20-20-20-20
+
+    ======== Serial Number & Password ========
+
+    Serial Number: 41-4C-43-4C-xx-xx-xx-xx
+    Password : 20-20-20-20-20-20-20-20-20-20
+
+    ==========================================
+
+    # ./gponctl init
+    # ./gponctl start
+
+    Start ONU with operational state: INIT (01)
+
+    # ./gponctl getSnPwd
+
+    ======== Serial Number & Password ========
+
+    Serial Number: 41-4C-43-4C-xx-xx-xx-xx
+    Password : 20-20-20-20-20-20-20-20-20-20
+
+    ==========================================
+
+Lastly, I bought the Nano G from [Senetic][8].
+
+
+
 [1]: https://zedt.eu/tech/hardware/obtaining-administrator-access-huawei-hg8247h/
 [2]: https://packetstormsecurity.com/files/35655/aescrypt2-1.0.tgz.html
 [3]: https://www.get.no
 [4]: https://www.ubnt.com/ufiber/ufiber-nano-g/
 [5]: https://www.hex-rays.com
+[6]: https://www.ubnt.com/ufiber/ufiber-nano-g/
+[7]: https://blog.onedefence.com/changing-the-gpon-serial-on-the-ubiquiti-ufiber-nano-g-part-one
+[8]: https://www.senetic.no/product/UF-NANO
