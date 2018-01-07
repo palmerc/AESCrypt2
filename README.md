@@ -46,6 +46,10 @@ The config is pretty long but the main thing needed was to allow you to add a ne
 
 `SHA256(MD5(admin))` which in this example yields  `465c194afb65670f38322df087f0a9bb225cc257e43eb4ac5a0c98ef5b3173ac`. 
 
+on the bash command-line this is accomplished like this:
+
+    echo -n admin | md5 | tr -d '\n' | shasum -a 256
+
 You'll find this user in the config from Get and it has been given reduced privileges (level 1).
 
 ### Get user
