@@ -62,7 +62,7 @@ The astute reader might have noticed I skipped the first 8-bytes before decrypti
 
 ### What about replacing the router?
 
-I replaced the box with a [Ubiquiti Nano G][6]. Get is using the Serial Number of the Huawei router as the method of authentication. This is a relatively common practice. So essentially, the OLT sees the Serial Number and lets it connect.
+I replaced the Huawei box with a [Ubiquiti Nano G][6]. Get is using the Serial Number of the Huawei router as the method of authentication. This is a relatively common practice. So essentially, the OLT sees the Serial Number and lets it connect. So in the web interface set [Profile 2][9] for Huawei and then the device will reboot. Then SSH to the box and change the Serial Number. Username and password are `ubnt` by default.
 
 On the Nano G you issue the following commands discussed on [this website][7]:
 
@@ -110,3 +110,4 @@ Lastly, I bought the Nano G from [Senetic][8].
 [6]: https://www.ubnt.com/ufiber/ufiber-nano-g/
 [7]: https://blog.onedefence.com/changing-the-gpon-serial-on-the-ubiquiti-ufiber-nano-g-part-one
 [8]: https://www.senetic.no/product/UF-NANO
+[9]: https://help.ubnt.com/hc/en-us/articles/115009335068-UFiber-GPON-Supported-Third-Party-OLTs
