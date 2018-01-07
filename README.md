@@ -75,7 +75,7 @@ On the Nano G you issue the following commands discussed on [this website][7]:
 
     Stop ONU without sending dying gasp messages
 
-    # ./gponctl setSnPwd --sn 41-4c-43-4c-xx-xx-xx-xx --pwd 20-20-20-20-20-20-20-20-20-20
+    # ./gponctl setSnPwd --sn 41-4c-43-4c-xx-xx-xx-xx
 
     ======== Serial Number & Password ========
 
