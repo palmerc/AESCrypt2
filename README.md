@@ -6,7 +6,7 @@ The original tarball came from here [packetstormsecurity.com][2].
 
 This router is used with Fiber customers in Oslo, Norway that are using        [Get][3] as their ISP.
 
-In typical ISP fashion they can't just hand you an Ethernet jack and get out of your way, they want to give you a router that NATs and provides WiFi. In this case they've adopted the Huawei HG8245 which is large and provides terrible WiFi coverage within the apartment. Funny that they'll sell you 500/500Mbps Internet service on a router that cannot possibly deliver it to the majority of modern devicees. They're at least nice enough to turn off the WiFi and set Bridge mode, but the box still takes over most of the electrical box in my apartment. Everytime I've had them make any change to my service-level they have turned off bridge-mode and then I have to make yet another call to turn it back on. So in summary I really wish they would replace the big box with a [Ubiquiti Nano G][4] and get out of the business of trying to do things they're terrible at.
+In typical ISP fashion they can't just hand you an Ethernet jack and get out of your way, they want to give you a router that NATs and provides WiFi. In this case they've adopted the Huawei HG8245 which is large and provides terrible WiFi coverage within the apartment. Funny that they'll sell you 500/500Mbps Internet service on a router that cannot possibly deliver it to the majority of modern devices. They're at least nice enough to turn off the WiFi and set Bridge mode, but the box still takes over most of the electrical box in my apartment. Everytime I've had them make any change to my service-level they have turned off bridge-mode and then I have to make yet another call to turn it back on. So in summary I really wish they would replace the big box with a [Ubiquiti Nano G][4] and get out of the business of trying to do things they're terrible at.
 
 ### Exploring the device
 
@@ -95,12 +95,20 @@ On the Nano G you issue the following commands discussed on [this website][7]:
 
     # ./gponctl getSnPwd
 
-    ======== Serial Number & Password ========
+    ======== Serial Number & Password =======
 
     Serial Number: 41-4C-43-4C-xx-xx-xx-xx
     Password : 20-20-20-20-20-20-20-20-20-20
 
     ==========================================
+
+This will not persist across reboots.
+
+### Persisting the serial number by rewriting firmware
+
+It is pretty easy to rewrite the NVRAM and persist the change. Another security researcher wrote this up
+
+[Rewrite the Serial Number][10]
 
 Lastly, I bought the Nano G from [Senetic][8].
 
@@ -115,3 +123,4 @@ Lastly, I bought the Nano G from [Senetic][8].
 [7]: https://blog.onedefence.com/changing-the-gpon-serial-on-the-ubiquiti-ufiber-nano-g-part-one
 [8]: https://www.senetic.no/product/UF-NANO
 [9]: https://help.ubnt.com/hc/en-us/articles/115009335068-UFiber-GPON-Supported-Third-Party-OLTs
+[10]: https://blog.onedefence.com/changing-the-gpon-serial-on-the-ubiquiti-ufiber-nano-g-part-two/
